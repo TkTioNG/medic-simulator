@@ -1,25 +1,46 @@
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import * as actions from './actions';
+import soldierStatusEnum from './enums/soldierStateEnum'
+import soldierLogo from './soldier.png';
+import injuredSoldierLogo from './injuredSoldier1.jpg'
 import './App.css';
 
-function App() {
+
+const App = (props) => {
+  const { soldiers, prepareBattlefield, startBattle } = props;
+
+  useEffect(() => {
+    prepareBattlefield();
+  }, [])
+  
+  const handleClick = (e) => {
+    startBattle()
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={handleClick}> Start Battle!</button>
+      {soldiers && Object.values(soldiers).map(soldier => 
+          <img alt="soldierLogo" className="soldierLogo" src={soldier.status === soldierStatusEnum.HEALTHY ? soldierLogo : injuredSoldierLogo}
+          style={{ position: 'absolute', top: soldier.coordinates.y*10, left: soldier.coordinates.x*15 }}/>
+        )}
     </div>
   );
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    soldiers: state.soldiers,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    prepareBattlefield: actions.prepareBattlefield,
+    startBattle: actions.startBattle,
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
