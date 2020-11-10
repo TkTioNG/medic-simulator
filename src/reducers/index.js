@@ -1,10 +1,12 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from "redux";
 
-import soldierReducer from './soldier';
+import soldierReducer from "./soldier";
+import medicReducer from "./medic";
 
 const rootReducer = combineReducers({
-    soldiers: soldierReducer,
-    // Other reducers if needed
-})
+  soldiers: soldierReducer,
+  medics: medicReducer,
+  // Other reducers if needed
+});
 
 export default rootReducer;

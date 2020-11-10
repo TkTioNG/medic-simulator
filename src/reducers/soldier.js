@@ -1,21 +1,94 @@
 import * as utils from "../utils";
 import * as actions from "../actions";
+import medicStatusEnum from "../enums/medicStateEnum";
+import soldierStatusEnum from "../enums/soldierStateEnum";
 
-export default function soldierReducer(state = {}, action) {
+const initialState = {
+  cycle_count: 0,
+  soldiers: {},
+  medics: {},
+};
+
+export default function soldierReducer(state = initialState, action) {
   switch (action.type) {
     case actions.PREPARE_BATTLEFIELD: {
       const initialLocations = utils.initializeBattlefield();
       return Object.freeze({
         ...state,
-        ...initialLocations,
+        soldiers: initialLocations.soldiers,
+        medics: initialLocations.medics,
       });
     }
     case actions.CYCLE: {
       const newSoldiersState = utils.getNewSoldiersState(state);
+      const newMedicsState = utils.getNewMedicsState(state);
+      const new_cycle_count = state.cycle_count + 1;
       return Object.freeze({
         ...state,
-        ...newSoldiersState,
+        soldiers: newSoldiersState,
+        medics: newMedicsState,
+        cycle_count: new_cycle_count,
       });
+    }
+    case actions.DISPATCH_MEDIC: {
+      let medics = { ...state.medics };
+      if (action.target) {
+        medics = {
+          ...state.medics,
+          [action.medicId]: {
+            ...state.medics[action.medicId],
+            target: action.target,
+            status: medicStatusEnum.ASSIGNED,
+          },
+        };
+      } else {
+        medics = {
+          ...state.medics,
+          [action.medicId]: {
+            ...state.medics[action.medicId],
+            target: null,
+            status: medicStatusEnum.IDLE,
+          },
+        };
+      }
+      return Object.freeze({
+        ...state,
+        medics: medics,
+      });
+    }
+    case actions.SOLDIER_HEALED: {
+      const healedSoldier = state.medics[action.medicId].target;
+      const medics = {
+        ...state.medics,
+        [action.medicId]: {
+          ...state.medics[action.medicId],
+          target: null,
+          status: medicStatusEnum.IDLE,
+        },
+      };
+      let soldiers = { ...state.soldiers };
+      if (state.soldiers[healedSoldier.id]) {
+        soldiers = {
+          ...state.soldiers,
+          [healedSoldier.id]: {
+            ...state.soldiers[healedSoldier.id],
+            health: 100,
+            status: soldierStatusEnum.HEALTHY,
+          },
+        };
+      }
+      return Object.freeze({
+        ...state,
+        medics: medics,
+        soldiers: soldiers,
+      });
+    }
+    case actions.SOLDIER_SUCCESS: {
+      const { [action.soldierId]: omit, ...newSoldiers } = state.soldiers;
+      return {
+        ...state,
+        soldiers: newSoldiers,
+      };
     }
     // Add other Actions here
     default: {
