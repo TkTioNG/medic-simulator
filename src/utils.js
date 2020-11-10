@@ -14,6 +14,7 @@ export const initializeBattlefield = () => {
         y: (settings.GIRD_HEIGHT / settings.SOLDIER_NUMBER) * i,
       },
       status: soldierStateEnum.HEALTHY,
+      called: false,
     };
   }
   const medics = {};
@@ -68,6 +69,7 @@ const getNewSoldierState = (oldState) => {
         : coordinates,
     health: oldState.status === soldierStateEnum.INJURED ? 0 : newHealth,
     status: newHealth > 0 ? soldierStateEnum.HEALTHY : soldierStateEnum.INJURED,
+    called: false,
   };
 };
 
@@ -170,6 +172,19 @@ const getNewMedicCoordinates = (oldCoordinates, stepSize, target) => {
     x: newX,
     y: newY,
   };
+};
+
+/* A function to get the Manhattan distance between two coordinates
+   coord obj should be an object that has x, y properties {x:, y:,} */
+const getManhattanDistance = (coordA, coordB) => {
+  return Math.abs(coordA.x - coordB.x) + Math.abs(coordA.y - coordB.y);
+};
+
+export const getClosest = (hunter, preys) => {
+  const distances = preys.map((prey) =>
+    getManhattanDistance(hunter.coordinates, prey.coordinates)
+  );
+  return distances.indexOf(Math.min(...distances));
 };
 
 // You can add more utility functions here

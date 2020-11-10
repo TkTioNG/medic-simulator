@@ -32,29 +32,46 @@ export default function soldierReducer(state = initialState, action) {
       });
     }
     case actions.DISPATCH_MEDIC: {
-      let medics = { ...state.medics };
-      if (action.target) {
-        medics = {
-          ...state.medics,
-          [action.medicId]: {
-            ...state.medics[action.medicId],
-            target: action.target,
-            status: medicStatusEnum.ASSIGNED,
-          },
-        };
-      } else {
-        medics = {
-          ...state.medics,
-          [action.medicId]: {
-            ...state.medics[action.medicId],
-            target: null,
-            status: medicStatusEnum.IDLE,
-          },
-        };
-      }
+      // Update medic target and status
+      const medics = {
+        ...state.medics,
+        [action.medicId]: {
+          ...state.medics[action.medicId],
+          target: action.target,
+          status: medicStatusEnum.ASSIGNED,
+        },
+      };
+      // Update soldiers called, so it wouldn't call medic again in next cycle
+      const soldiers = {
+        ...state.soldiers,
+        [action.target.id]: {
+          ...state.soldiers[action.target.id],
+          called: true,
+        },
+      };
+      // if (action.target) {
+      //   medics = {
+      //     ...state.medics,
+      //     [action.medicId]: {
+      //       ...state.medics[action.medicId],
+      //       target: action.target,
+      //       status: medicStatusEnum.ASSIGNED,
+      //     },
+      //   };
+      // } else {
+      //   medics = {
+      //     ...state.medics,
+      //     [action.medicId]: {
+      //       ...state.medics[action.medicId],
+      //       target: null,
+      //       status: medicStatusEnum.IDLE,
+      //     },
+      //   };
+      // }
       return Object.freeze({
         ...state,
         medics: medics,
+        soldiers: soldiers,
       });
     }
     case actions.SOLDIER_HEALED: {
@@ -67,17 +84,28 @@ export default function soldierReducer(state = initialState, action) {
           status: medicStatusEnum.IDLE,
         },
       };
-      let soldiers = { ...state.soldiers };
-      if (state.soldiers[healedSoldier.id]) {
-        soldiers = {
-          ...state.soldiers,
-          [healedSoldier.id]: {
-            ...state.soldiers[healedSoldier.id],
-            health: 100,
-            status: soldierStatusEnum.HEALTHY,
-          },
-        };
-      }
+      // let soldiers = { ...state.soldiers };
+      // if (state.soldiers[healedSoldier.id]) {
+      //   soldiers = {
+      //     ...state.soldiers,
+      //     [healedSoldier.id]: {
+      //       ...state.soldiers[healedSoldier.id],
+      //       health: 100,
+      //       status: soldierStatusEnum.HEALTHY,
+      //       called: false,
+      //     },
+      //   };
+      // }
+      // Update soldiers status after regeneration
+      const soldiers = {
+        ...state.soldiers,
+        [healedSoldier.id]: {
+          ...state.soldiers[healedSoldier.id],
+          health: 100,
+          status: soldierStatusEnum.HEALTHY,
+          called: false,
+        },
+      };
       return Object.freeze({
         ...state,
         medics: medics,

@@ -32,11 +32,19 @@ const App = (props) => {
     <div className="App">
       <div
         className="finishing-line"
-        style={{ left: settings.GRID_LENGTH * 15, height: settings.GIRD_HEIGHT * 10 }}
+        style={{
+          left: settings.GRID_LENGTH * 15,
+          height: settings.GIRD_HEIGHT * 10,
+        }}
       ></div>
       <button onClick={handleClick}> Start Battle!</button>
       <div>Success: {success_count}</div>
       <div>Cycle: {cycle_count}</div>
+      {success_count >= 10 && (
+        <h1 style={{ color: "limegreen" }}>
+          Hooray! All the soldier has crossed the battlefield.
+        </h1>
+      )}
       {soldiers &&
         Object.values(soldiers).map((soldier) => (
           <div>
