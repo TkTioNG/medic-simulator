@@ -89,7 +89,7 @@ export default function soldierReducer(state = initialState, action) {
       return {
         ...state,
         soldiers: newSoldiers,
-        success_count: state.success_count + 1
+        success_count: state.success_count + 1,
       };
     }
     // Add other Actions here

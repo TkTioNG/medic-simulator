@@ -1,4 +1,4 @@
-import { put, takeEvery, delay, all, select } from "redux-saga/effects";
+import { put, takeEvery, delay, all, select, call } from "redux-saga/effects";
 
 import * as actions from "../actions";
 import * as settings from "../settings";
@@ -11,19 +11,17 @@ function* handleCycle(action) {
     for (let soldierId of successSoldiers) {
       console.log(soldierId);
       yield put(actions.solderSuccess(soldierId));
+      // yield call(actions.solderSuccess, soldierId);
     }
   }
 
   const injuredSoldiers = yield select(selectors.getInjuredSoldiers);
   const idleMedics = yield select(selectors.getIdleMedics);
-  /* Here you will have access to the soldiers that are currently injured
-    so you can create a selector to look for appropriate medics, then create an
-    action to dispatch medics to specific soldiers
-     */
 
-  if (injuredSoldiers && idleMedics.length) {
+  if (injuredSoldiers.length && idleMedics.length) {
     for (let soldierId of injuredSoldiers) {
       yield put(actions.callMedic(soldierId));
+      // yield call(actions.callMedic, soldierId);
     }
   }
 

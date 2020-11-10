@@ -92,7 +92,12 @@ const getNewCoordinates = (oldCoordinates, stepSize) => {
 
   return {
     x: newX,
-    y: newY < 0 ? 0 : newY > settings.GIRD_HEIGHT ? settings.GIRD_HEIGHT - 1 : newY, // prevent go out of the grid
+    y:
+      newY < 0
+        ? 0
+        : newY > settings.GIRD_HEIGHT
+        ? settings.GIRD_HEIGHT - 1
+        : newY, // prevent go out of the grid
   };
 };
 
