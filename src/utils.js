@@ -92,7 +92,7 @@ const getNewCoordinates = (oldCoordinates, stepSize) => {
 
   return {
     x: newX,
-    y: newY < 0 ? 0 : newY,
+    y: newY < 0 ? 0 : newY > settings.GIRD_HEIGHT ? settings.GIRD_HEIGHT - 1 : newY, // prevent go out of the grid
   };
 };
 
@@ -124,7 +124,9 @@ const getNewMedicState = (oldState) => {
   return {
     id: oldState.id,
     coordinates:
-      oldState.status === medicStateEnum.IDLE || oldState.target == null || oldState.target === undefined
+      oldState.status === medicStateEnum.IDLE ||
+      oldState.target == null ||
+      oldState.target === undefined
         ? oldState.coordinates
         : getNewMedicCoordinates(
             oldState.coordinates,
@@ -132,7 +134,9 @@ const getNewMedicState = (oldState) => {
             oldState.target
           ),
     status:
-      oldState.target == null || oldState.target === undefined ? medicStateEnum.IDLE : medicStateEnum.ASSIGNED, //oldState.target == null ? medicStateEnum.IDLE :
+      oldState.target == null || oldState.target === undefined
+        ? medicStateEnum.IDLE
+        : medicStateEnum.ASSIGNED, //oldState.target == null ? medicStateEnum.IDLE :
     target: oldState.target,
   };
 };
@@ -148,14 +152,14 @@ const getNewMedicCoordinates = (oldCoordinates, stepSize, target) => {
     Math.abs(targetX - oldCoordinates.x) <= stepSize
       ? targetX
       : targetX < oldCoordinates.x
-      ? oldCoordinates.x - stepSize
-      : oldCoordinates.x + stepSize;
+      ? oldCoordinates.x - getRandomIntInclusive(0, stepSize)
+      : oldCoordinates.x + getRandomIntInclusive(0, stepSize);
   const newY =
     Math.abs(targetY - oldCoordinates.y) <= stepSize
       ? targetY
       : targetY < oldCoordinates.y
-      ? oldCoordinates.y - stepSize
-      : oldCoordinates.y + stepSize;
+      ? oldCoordinates.y - getRandomIntInclusive(0, stepSize)
+      : oldCoordinates.y + getRandomIntInclusive(0, stepSize);
 
   return {
     x: newX,

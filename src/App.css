@@ -44,3 +44,16 @@
     transform: rotate(360deg);
   }
 }
+
+.finishing-line {
+  position: absolute;
+  top: 0;
+  width: 5px;
+  background: repeating-linear-gradient(
+    45deg,
+    black,
+    black 20px,
+    yellow 20px,
+    yellow 40px
+  );
+}

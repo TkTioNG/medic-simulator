@@ -31,17 +31,12 @@ const App = (props) => {
   return (
     <div className="App">
       <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: settings.GRID_LENGTH * 15,
-          height: settings.GIRD_HEIGHT * 10,
-          width: "5px",
-          backgroundColor: "black",
-        }}
+        className="finishing-line"
+        style={{ left: settings.GRID_LENGTH * 15, height: settings.GIRD_HEIGHT * 10 }}
       ></div>
       <button onClick={handleClick}> Start Battle!</button>
-      <div>{success_count}</div>
+      <div>Success: {success_count}</div>
+      <div>Cycle: {cycle_count}</div>
       {soldiers &&
         Object.values(soldiers).map((soldier) => (
           <div>
@@ -68,7 +63,7 @@ const App = (props) => {
                 color: "red",
               }}
             >
-              {soldier.id}
+              {soldier.id + 1}
             </span>
           </div>
         ))}
@@ -95,7 +90,7 @@ const App = (props) => {
                 color: "green",
               }}
             >
-              {medic.id}
+              {medic.id + 1}
             </span>
           </div>
         ))}

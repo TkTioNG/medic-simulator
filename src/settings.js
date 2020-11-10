@@ -1,10 +1,10 @@
-export const GRID_LENGTH = 40; // Change back to 100
+export const GRID_LENGTH = 100; // Change back to 100
 export const GIRD_HEIGHT = 100;
 export const SOLDIER_NUMBER = 10;
 export const MEDIC_NUMBER = 3; // Change to 3 later on
 
 export const CYCLE_DELAY=  100;
-export const CYCLE_LIMIT=  100; // Should be removed later on
+export const CYCLE_LIMIT=  150; // Should be removed later on
 export const HEAL_CYCLE = 3; // not necessary
 
 export const SOLDIER_STEP_SIZE = 7;
