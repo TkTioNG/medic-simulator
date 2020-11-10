@@ -5,8 +5,16 @@ import * as settings from "../settings";
 import * as selectors from "./selectors";
 
 function* handleCycle(action) {
-  const injuredSoldiers = yield select(selectors.getInjuredSoldiers);
   const successSoldiers = yield select(selectors.getSuccessSoldiers);
+
+  if (successSoldiers.length) {
+    for (let soldierId of successSoldiers) {
+      console.log(soldierId);
+      yield put(actions.solderSuccess(soldierId));
+    }
+  }
+
+  const injuredSoldiers = yield select(selectors.getInjuredSoldiers);
   const idleMedics = yield select(selectors.getIdleMedics);
   /* Here you will have access to the soldiers that are currently injured
     so you can create a selector to look for appropriate medics, then create an
@@ -14,20 +22,13 @@ function* handleCycle(action) {
      */
 
   if (injuredSoldiers && idleMedics.length) {
-    for (let soldierId in injuredSoldiers) {
+    for (let soldierId of injuredSoldiers) {
       yield put(actions.callMedic(soldierId));
-    }
-  }
-
-  if (successSoldiers.length) {
-    for (let soldierId in successSoldiers) {
-      yield put(actions.solderSuccess(soldierId));
     }
   }
 
   if (idleMedics.length < settings.MEDIC_NUMBER) {
     const assignedMedics = yield select(selectors.getAssignedMedics);
-    console.log(assignedMedics);
     for (let medic of assignedMedics) {
       if (
         medic.target &&
@@ -58,8 +59,6 @@ function* callMedic(action) {
     yield put(actions.dispatchMedic(idleMedics[0].id, target));
   }
 }
-
-function* dispatchMedic(action) {}
 
 function* watchCallMedic() {
   yield takeEvery(actions.CALL_MEDIC, callMedic);

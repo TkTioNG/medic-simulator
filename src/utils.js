@@ -92,7 +92,7 @@ const getNewCoordinates = (oldCoordinates, stepSize) => {
 
   return {
     x: newX,
-    y: newY,
+    y: newY < 0 ? 0 : newY,
   };
 };
 
@@ -121,7 +121,6 @@ export const getNewMedicsState = (state) => {
 /* A function to get the new values of a single medic after a cycle */
 const getNewMedicState = (oldState) => {
   /* Set injured status depending on health */
-  console.log(oldState.target);
   return {
     id: oldState.id,
     coordinates:

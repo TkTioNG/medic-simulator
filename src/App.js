@@ -17,6 +17,7 @@ const App = (props) => {
     prepareBattlefield,
     startBattle,
     cycle_count,
+    success_count,
   } = props;
 
   useEffect(() => {
@@ -40,49 +41,74 @@ const App = (props) => {
         }}
       ></div>
       <button onClick={handleClick}> Start Battle!</button>
+      <div>{success_count}</div>
       {soldiers &&
         Object.values(soldiers).map((soldier) => (
-          <img
-            key={soldier.id}
-            alt="soldierLogo"
-            className="soldierLogo"
-            src={
-              soldier.status === soldierStatusEnum.HEALTHY
-                ? soldierLogo
-                : injuredSoldierLogo
-            }
-            style={{
-              position: "absolute",
-              top: soldier.coordinates.y * 10,
-              left: soldier.coordinates.x * 15,
-            }}
-          />
+          <div>
+            <img
+              key={soldier.id}
+              alt="soldierLogo"
+              className="soldierLogo"
+              src={
+                soldier.status === soldierStatusEnum.HEALTHY
+                  ? soldierLogo
+                  : injuredSoldierLogo
+              }
+              style={{
+                position: "absolute",
+                top: soldier.coordinates.y * 10,
+                left: soldier.coordinates.x * 15,
+              }}
+            />
+            <span
+              style={{
+                position: "absolute",
+                top: soldier.coordinates.y * 10 - 5,
+                left: soldier.coordinates.x * 15 - 5,
+                color: "red",
+              }}
+            >
+              {soldier.id}
+            </span>
+          </div>
         ))}
 
       {medics &&
         Object.values(medics).map((medic) => (
-          <img
-            key={medic.id}
-            alt="medicLogo"
-            className="medicLogo"
-            src={medicLogo}
-            style={{
-              position: "absolute",
-              top: medic.coordinates.y * 10,
-              left: medic.coordinates.x * 15,
-            }}
-          />
+          <div>
+            <img
+              key={medic.id}
+              alt="medicLogo"
+              className="medicLogo"
+              src={medicLogo}
+              style={{
+                position: "absolute",
+                top: medic.coordinates.y * 10,
+                left: medic.coordinates.x * 15,
+              }}
+            />
+            <span
+              style={{
+                position: "absolute",
+                top: medic.coordinates.y * 10 - 5,
+                left: medic.coordinates.x * 15 - 5,
+                color: "green",
+              }}
+            >
+              {medic.id}
+            </span>
+          </div>
         ))}
     </div>
   );
 };
 
 function mapStateToProps(state) {
-  // console.log(state)
   return {
     medics: state.soldiers.medics,
     soldiers: state.soldiers.soldiers,
     cycle_count: state.soldiers.cycle_count,
+    success_count: state.soldiers.success_count,
   };
 }
 

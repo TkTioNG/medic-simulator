@@ -5,6 +5,7 @@ import soldierStatusEnum from "../enums/soldierStateEnum";
 
 const initialState = {
   cycle_count: 0,
+  success_count: 0,
   soldiers: {},
   medics: {},
 };
@@ -88,6 +89,7 @@ export default function soldierReducer(state = initialState, action) {
       return {
         ...state,
         soldiers: newSoldiers,
+        success_count: state.success_count + 1
       };
     }
     // Add other Actions here
