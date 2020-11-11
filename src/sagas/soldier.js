@@ -1,4 +1,4 @@
-import { put, takeEvery, delay, all, select, call } from "redux-saga/effects";
+import { put, takeEvery, delay, all, select } from "redux-saga/effects";
 
 import * as actions from "../actions";
 import * as settings from "../settings";
@@ -32,11 +32,12 @@ function* handleCycle(action) {
       const medic = yield select(selectors.selectMedic, medicId);
       if (
         medic.target &&
+        !medic.startHeal &&
         medic.coordinates.x === medic.target.coordinates.x &&
         medic.coordinates.y === medic.target.coordinates.y
       ) {
-        yield delay(settings.HEAL_CYCLE * settings.CYCLE_DELAY);
-        yield put(actions.soldierHealed(medic.id));
+        yield put(actions.readyToHeal(medic.id));
+        yield put(actions.healing(medic.id));
       }
     }
   }
@@ -70,8 +71,27 @@ function* callMedic(action) {
   }
 }
 
+function* healingSoldier(action) {
+  yield delay(settings.HEAL_CYCLE * settings.CYCLE_DELAY);
+  yield put(actions.soldierHealed(action.medicId));
+}
+
+// function* dispatchMedic(action) {
+//   const medic = yield select(selectors.selectMedic, action.medicId);
+//   if (
+//     medic.target &&
+//     medic.coordinates.x === medic.target.coordinates.x &&
+//     medic.coordinates.y === medic.target.coordinates.y
+//   ) {
+//     yield delay(settings.HEAL_CYCLE * settings.CYCLE_DELAY);
+//     yield put(actions.soldierHealed(medic.id));
+//   }
+// }
+
 function* watchCallMedic() {
   yield takeEvery(actions.CALL_MEDIC, callMedic);
+  yield takeEvery(actions.HEALING, healingSoldier);
+  // yield takeEvery(actions.DISPATCH_MEDIC, dispatchMedic);
 }
 
 export default function* soldierSaga() {

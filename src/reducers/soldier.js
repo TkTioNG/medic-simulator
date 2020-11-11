@@ -39,6 +39,7 @@ export default function soldierReducer(state = initialState, action) {
           ...state.medics[action.medicId],
           target: action.target,
           status: medicStatusEnum.ASSIGNED,
+          startHeal: false,
         },
       };
       // Update soldiers called, so it wouldn't call medic again in next cycle
@@ -74,6 +75,19 @@ export default function soldierReducer(state = initialState, action) {
         soldiers: soldiers,
       });
     }
+    case actions.READY_TO_HEAL: {
+      const medics = {
+        ...state.medics,
+        [action.medicId]: {
+          ...state.medics[action.medicId],
+          startHeal: true,
+        },
+      };
+      return {
+        ...state,
+        medics: medics,
+      };
+    }
     case actions.SOLDIER_HEALED: {
       const healedSoldier = state.medics[action.medicId].target;
       const medics = {
@@ -82,8 +96,19 @@ export default function soldierReducer(state = initialState, action) {
           ...state.medics[action.medicId],
           target: null,
           status: medicStatusEnum.IDLE,
+          startHeal: false,
         },
       };
+      // Update soldiers status after regeneration
+      const soldiers = {
+        ...state.soldiers,
+        [healedSoldier.id]: {
+          ...state.soldiers[healedSoldier.id],
+          health: 100,
+          status: soldierStatusEnum.HEALTHY,
+          called: false,
+        },
+      };      
       // let soldiers = { ...state.soldiers };
       // if (state.soldiers[healedSoldier.id]) {
       //   soldiers = {
@@ -96,16 +121,6 @@ export default function soldierReducer(state = initialState, action) {
       //     },
       //   };
       // }
-      // Update soldiers status after regeneration
-      const soldiers = {
-        ...state.soldiers,
-        [healedSoldier.id]: {
-          ...state.soldiers[healedSoldier.id],
-          health: 100,
-          status: soldierStatusEnum.HEALTHY,
-          called: false,
-        },
-      };
       return Object.freeze({
         ...state,
         medics: medics,

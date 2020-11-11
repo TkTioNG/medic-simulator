@@ -27,6 +27,7 @@ export const initializeBattlefield = () => {
       },
       status: medicStateEnum.IDLE,
       target: null,
+      startHeal: false,
     };
   }
   return { soldiers: soldiers, medics: medics };
@@ -145,6 +146,7 @@ const getNewMedicState = (oldState) => {
         ? medicStateEnum.IDLE
         : medicStateEnum.ASSIGNED, //oldState.target == null ? medicStateEnum.IDLE :
     target: oldState.target,
+    startHeal: oldState.startHeal,
   };
 };
 
