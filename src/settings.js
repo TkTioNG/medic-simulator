@@ -8,6 +8,6 @@ export const CYCLE_LIMIT = 500; // Should be removed later on
 export const HEAL_CYCLE = 3; // not necessary
 
 export const SOLDIER_STEP_SIZE = 5;
-export const SOLDIER_MIN_HEALTH_DEGEN = 1; // change back to 1
-export const SOLDIER_MAX_HEALTH_DEGEN = 7; // change back to 7
+export const SOLDIER_MIN_HEALTH_DEGEN = 20; // change back to 1
+export const SOLDIER_MAX_HEALTH_DEGEN = 20; // change back to 7
 export const MEDIC_STEP_SIZE = 3 * SOLDIER_STEP_SIZE;

@@ -7,6 +7,7 @@ import soldierStatusEnum from "./enums/soldierStateEnum";
 import soldierLogo from "./images/soldier.png";
 import injuredSoldierLogo from "./images/injuredSoldier1.jpg";
 import medicLogo from "./images/medic.png";
+import healingLogo from "./images/healing.png";
 import "./App.css";
 import * as settings from "./settings";
 
@@ -47,9 +48,16 @@ const App = (props) => {
       )}
       {soldiers &&
         Object.values(soldiers).map((soldier) => (
-          <div>
+          <div
+            key={soldier.id}
+            className="Logo-holder"
+            style={{
+              top: soldier.coordinates.y * 10,
+              left: soldier.coordinates.x * 15,
+              color: "red",
+            }}
+          >
             <img
-              key={soldier.id}
               alt="soldierLogo"
               className="soldierLogo"
               src={
@@ -57,49 +65,31 @@ const App = (props) => {
                   ? soldierLogo
                   : injuredSoldierLogo
               }
-              style={{
-                position: "absolute",
-                top: soldier.coordinates.y * 10,
-                left: soldier.coordinates.x * 15,
-              }}
             />
-            <span
-              style={{
-                position: "absolute",
-                top: soldier.coordinates.y * 10 - 5,
-                left: soldier.coordinates.x * 15 - 5,
-                color: "red",
-              }}
-            >
-              {soldier.id + 1}
-            </span>
+            <span>{soldier.id + 1}</span>
           </div>
         ))}
 
       {medics &&
         Object.values(medics).map((medic) => (
-          <div>
-            <img
-              key={medic.id}
-              alt="medicLogo"
-              className="medicLogo"
-              src={medicLogo}
-              style={{
-                position: "absolute",
-                top: medic.coordinates.y * 10,
-                left: medic.coordinates.x * 15,
-              }}
-            />
-            <span
-              style={{
-                position: "absolute",
-                top: medic.coordinates.y * 10 - 5,
-                left: medic.coordinates.x * 15 - 5,
-                color: "green",
-              }}
-            >
-              {medic.id + 1}
-            </span>
+          <div
+            key={medic.id}
+            className="Logo-holder"
+            style={{
+              top: medic.coordinates.y * 10 - 5,
+              left: medic.coordinates.x * 15 - 5,
+              color: "green",
+            }}
+          >
+            <img alt="medicLogo" className="medicLogo" src={medicLogo} />
+            <span>{medic.id + 1}</span>
+            {medic.startHeal && (
+              <img
+                alt="healingLogo"
+                className="healingLogo"
+                src={healingLogo}
+              />
+            )}
           </div>
         ))}
     </div>

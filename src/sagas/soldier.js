@@ -8,10 +8,9 @@ import { getClosest } from "../utils";
 function* handleCycle(action) {
   const successSoldiers = yield select(selectors.getSuccessSoldiers);
   // Check if any soldier has succeeded
-  if (successSoldiers.length) {
+  if (successSoldiers.length > 0) {
     for (let soldierId of successSoldiers) {
       yield put(actions.solderSuccess(soldierId));
-      // yield call(actions.solderSuccess, soldierId);
     }
   }
 
@@ -19,10 +18,9 @@ function* handleCycle(action) {
   const idleMedics = yield select(selectors.getIdleMedics);
 
   if (injuredSoldiers.length && idleMedics.length) {
-    // Call medic based on first come first sev=rve basis
+    // Call medic based on first come first serve basis
     for (let soldierId of injuredSoldiers) {
       yield put(actions.callMedic(soldierId));
-      // yield call(actions.callMedic, soldierId);
     }
   }
 
@@ -49,49 +47,35 @@ function* handleCycle(action) {
   }
 }
 
+function* handleCallMedic(action) {
+  const idleMedics = yield select(selectors.getIdleMedics);
+  // Dispatch first idle medic to the target (soldier)
+  if (idleMedics.length > 0) {
+    const target = yield select(selectors.selectSoldier, action.soldierId);
+    // Retrieve all idle medics
+    const availableMedics = [];
+    for (let idleMedic of idleMedics) {
+      availableMedics.push(yield select(selectors.selectMedic, idleMedic));
+    }
+    // Get closest medic to the soldier based on Manhattan distance
+    const closestMedic = getClosest(target, availableMedics);
+    yield put(actions.dispatchMedic(idleMedics[closestMedic], target));
+  }
+}
+
+function* handleHealingSoldier(action) {
+  yield delay(settings.HEAL_CYCLE * settings.CYCLE_DELAY);
+  yield put(actions.soldierHealed(action.medicId));
+}
+
 function* watchBattle() {
   yield takeEvery(actions.START_BATTLE, handleCycle);
   yield takeEvery(actions.CYCLE, handleCycle);
 }
 
-function* callMedic(action) {
-  const idleMedics = yield select(selectors.getIdleMedics);
-  const target = yield select(selectors.selectSoldier, action.soldierId);
-  // Dispatch first idle medic to the target (soldier)
-  if (idleMedics.length) {
-    const availableMedics = [];
-    for (let idleMedic of idleMedics) {
-      availableMedics.push(yield select(selectors.selectMedic, idleMedic));
-    }
-    // const availableMedics = idleMedics.map((medicId) => getMedic(medicId));
-    // console.log(availableMedics);
-    const closestMedic = getClosest(target, availableMedics);
-    // console.log(closestMedic);
-    yield put(actions.dispatchMedic(idleMedics[closestMedic], target));
-  }
-}
-
-function* healingSoldier(action) {
-  yield delay(settings.HEAL_CYCLE * settings.CYCLE_DELAY);
-  yield put(actions.soldierHealed(action.medicId));
-}
-
-// function* dispatchMedic(action) {
-//   const medic = yield select(selectors.selectMedic, action.medicId);
-//   if (
-//     medic.target &&
-//     medic.coordinates.x === medic.target.coordinates.x &&
-//     medic.coordinates.y === medic.target.coordinates.y
-//   ) {
-//     yield delay(settings.HEAL_CYCLE * settings.CYCLE_DELAY);
-//     yield put(actions.soldierHealed(medic.id));
-//   }
-// }
-
 function* watchCallMedic() {
-  yield takeEvery(actions.CALL_MEDIC, callMedic);
-  yield takeEvery(actions.HEALING, healingSoldier);
-  // yield takeEvery(actions.DISPATCH_MEDIC, dispatchMedic);
+  yield takeEvery(actions.CALL_MEDIC, handleCallMedic);
+  yield takeEvery(actions.HEALING, handleHealingSoldier);
 }
 
 export default function* soldierSaga() {

@@ -50,25 +50,6 @@ export default function soldierReducer(state = initialState, action) {
           called: true,
         },
       };
-      // if (action.target) {
-      //   medics = {
-      //     ...state.medics,
-      //     [action.medicId]: {
-      //       ...state.medics[action.medicId],
-      //       target: action.target,
-      //       status: medicStatusEnum.ASSIGNED,
-      //     },
-      //   };
-      // } else {
-      //   medics = {
-      //     ...state.medics,
-      //     [action.medicId]: {
-      //       ...state.medics[action.medicId],
-      //       target: null,
-      //       status: medicStatusEnum.IDLE,
-      //     },
-      //   };
-      // }
       return Object.freeze({
         ...state,
         medics: medics,
@@ -108,19 +89,7 @@ export default function soldierReducer(state = initialState, action) {
           status: soldierStatusEnum.HEALTHY,
           called: false,
         },
-      };      
-      // let soldiers = { ...state.soldiers };
-      // if (state.soldiers[healedSoldier.id]) {
-      //   soldiers = {
-      //     ...state.soldiers,
-      //     [healedSoldier.id]: {
-      //       ...state.soldiers[healedSoldier.id],
-      //       health: 100,
-      //       status: soldierStatusEnum.HEALTHY,
-      //       called: false,
-      //     },
-      //   };
-      // }
+      };
       return Object.freeze({
         ...state,
         medics: medics,

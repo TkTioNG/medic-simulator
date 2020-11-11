@@ -24,7 +24,7 @@ export const selectSoldier = (state, soldierId) => {
   return state.soldiers.soldiers[soldierId];
 };
 
-export const getSoldierOnField = (state) => {    
+export const getSoldierOnField = (state) => {
   return Object.keys(state.soldiers.soldiers).length;
 };
 
