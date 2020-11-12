@@ -123,9 +123,11 @@ describe("Call Medics", () => {
     expect(gen.next(injuredSoldiers).value).toEqual(
       select(selectors.getIdleMedics)
     );
+    // Each injured soldier will call medic once
     expect(gen.next(idleMedic).value).toEqual(put(actions.callMedic(0)));
     expect(gen.next().value).toEqual(put(actions.callMedic(1)));
     expect(gen.next().value).toEqual(put(actions.callMedic(2)));
+    // Proceed to next phases
     expect(gen.next().value).toEqual(select(selectors.getAssignedMedics));
   });
 
@@ -136,10 +138,10 @@ describe("Call Medics", () => {
     expect(gen.next(injuredSoldiers).value).toEqual(
       select(selectors.getIdleMedics)
     );
+    // Proceed to next phases
     expect(gen.next(idleMedic).value).toEqual(
       select(selectors.getAssignedMedics)
     );
-    // Proceed to next phases
   });
 
   it("Do not call medics when there is no injured soldier", () => {
@@ -149,10 +151,10 @@ describe("Call Medics", () => {
     expect(gen.next(injuredSoldiers).value).toEqual(
       select(selectors.getIdleMedics)
     );
+    // Proceed to next phases
     expect(gen.next(idleMedic).value).toEqual(
       select(selectors.getAssignedMedics)
     );
-    // Proceed to next phases
   });
 });
 
@@ -221,8 +223,7 @@ describe("Heal Soldier", () => {
     const idleMedic = [2];
     const assignedMedic = [0, 1];
     const medics = {
-      0: {
-        // Haven't reach to the soldier
+      0: { // Haven't reach to the soldier
         id: 0,
         startHeal: false,
         coordinates: { x: 10, y: 10 },
@@ -230,8 +231,7 @@ describe("Heal Soldier", () => {
           coordinates: { x: 5, y: 5 },
         },
       },
-      1: {
-        // Currently healing the soldiers
+      1: { // Currently healing the soldiers
         id: 1,
         startHeal: true,
         coordinates: { x: 5, y: 5 },
