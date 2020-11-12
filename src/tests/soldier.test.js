@@ -1,7 +1,7 @@
 import { call, delay, put, select } from "redux-saga/effects";
 
-import * as sagas from "./soldier";
-import * as selectors from "./selectors";
+import * as sagas from "../sagas/soldier";
+import * as selectors from "../sagas/selectors";
 import * as actions from "../actions";
 import { getClosest } from "../utils";
 import * as settings from "../settings";
