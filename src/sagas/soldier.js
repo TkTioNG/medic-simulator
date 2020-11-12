@@ -1,11 +1,11 @@
-import { put, takeEvery, delay, all, select } from "redux-saga/effects";
+import { put, takeEvery, delay, all, select, call } from "redux-saga/effects";
 
 import * as actions from "../actions";
 import * as settings from "../settings";
 import * as selectors from "./selectors";
 import { getClosest } from "../utils";
 
-function* handleCycle(action) {
+export function* handleCycle(action) {
   const successSoldiers = yield select(selectors.getSuccessSoldiers);
   // Check if any soldier has succeeded
   if (successSoldiers.length > 0) {
@@ -17,7 +17,7 @@ function* handleCycle(action) {
   const injuredSoldiers = yield select(selectors.getInjuredSoldiers);
   const idleMedics = yield select(selectors.getIdleMedics);
 
-  if (injuredSoldiers.length && idleMedics.length) {
+  if (injuredSoldiers.length > 0 && idleMedics.length > 0) {
     // Call medic based on first come first serve basis
     for (let soldierId of injuredSoldiers) {
       yield put(actions.callMedic(soldierId));
@@ -47,7 +47,7 @@ function* handleCycle(action) {
   }
 }
 
-function* handleCallMedic(action) {
+export function* handleCallMedic(action) {
   const idleMedics = yield select(selectors.getIdleMedics);
   // Dispatch first idle medic to the target (soldier)
   if (idleMedics.length > 0) {
@@ -58,12 +58,12 @@ function* handleCallMedic(action) {
       availableMedics.push(yield select(selectors.selectMedic, idleMedic));
     }
     // Get closest medic to the soldier based on Manhattan distance
-    const closestMedic = getClosest(target, availableMedics);
+    const closestMedic = yield call(getClosest, target, availableMedics); // getClosest(target, availableMedics);
     yield put(actions.dispatchMedic(idleMedics[closestMedic], target));
   }
 }
 
-function* handleHealingSoldier(action) {
+export function* handleHealingSoldier(action) {
   yield delay(settings.HEAL_CYCLE * settings.CYCLE_DELAY);
   yield put(actions.soldierHealed(action.medicId));
 }

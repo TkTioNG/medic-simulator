@@ -76,8 +76,8 @@ const App = (props) => {
             key={medic.id}
             className="Logo-holder"
             style={{
-              top: medic.coordinates.y * 10 - 5,
-              left: medic.coordinates.x * 15 - 5,
+              top: medic.coordinates.y * 10,
+              left: medic.coordinates.x * 15,
               color: "green",
             }}
           >
