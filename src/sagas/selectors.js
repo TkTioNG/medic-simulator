@@ -30,19 +30,19 @@ export const getSoldierOnField = (state) => {
 
 // Return an array of available medics
 export const getIdleMedics = (state) => {
-  return Object.values(state.soldiers.medics)
+  return Object.values(state.medics.medics)
     .filter((medic) => medic.status === medicStatusEnum.IDLE)
     .map((medicObj) => medicObj.id);
 };
 
 // Return an array of assigned medics
 export const getAssignedMedics = (state) => {
-  return Object.values(state.soldiers.medics)
+  return Object.values(state.medics.medics)
     .filter((medic) => medic.status === medicStatusEnum.ASSIGNED)
     .map((medicObj) => medicObj.id);
 };
 
 // A Selector for medic given an ID
 export const selectMedic = (state, medicId) => {
-  return state.soldiers.medics[medicId];
+  return state.medics.medics[medicId];
 };

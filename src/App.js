@@ -98,7 +98,7 @@ const App = (props) => {
 
 function mapStateToProps(state) {
   return {
-    medics: state.soldiers.medics,
+    medics: state.medics.medics,
     soldiers: state.soldiers.soldiers,
     cycle_count: state.soldiers.cycle_count,
     success_count: state.soldiers.success_count,
