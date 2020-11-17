@@ -2,41 +2,63 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.gridContainer {
+  display: flex; 
+  flex-wrap: wrap;
+  width: 1500px;
+}
+
+.gridCell {
+  border: 1px green solid;
+  height: 8px;
+  width: 13px;
+}
+
+.App .Logo-holder {
+  position: absolute;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 
 .App .soldierLogo {
   height: 40px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.App .medicLogo {
+  height: 50px;
+}
+
+.App .healingLogo {
+  position: relative;
+  top: -60px;
+  left: -40px;
+  height: 15px;
+  animation: healing-logo-bounce infinite 1.5s ease-in-out;
+}
+
+@keyframes healing-logo-bounce {
+  0% {
+    height: 15px;
+  }
+  50% {
+    height: 30px;
+  }
+  100% {
+    height: 15px;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.finishing-line {
+  position: absolute;
+  top: 0;
+  width: 5px;
+  background: repeating-linear-gradient(
+    45deg,
+    black,
+    black 20px,
+    yellow 20px,
+    yellow 40px
+  );
 }
