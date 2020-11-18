@@ -1,22 +1,15 @@
 
 import * as utils from '../utils';
-import * as actions from '../actions';
+import * as battleActions from '../actions/battle';
 
-export default function soldierReducer(state = {}, action) {
+export default function battleReducer(state = {}, action) {
     switch (action.type) {
-        case actions.PREPARE_BATTLEFIELD: {
+        case battleActions.PREPARE_BATTLEFIELD: {
             const initialLocations = utils.initializeBattlefield();
             return Object.freeze({
                 ...state,
                 ...initialLocations
                 
-            })
-        }
-        case actions.CYCLE: {
-            const newSoldiersState = utils.getNewSoldiersState(state);
-            return Object.freeze({
-                ...state,
-                ...newSoldiersState
             })
         }
         // Add other Actions here

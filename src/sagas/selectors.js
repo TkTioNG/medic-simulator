@@ -12,4 +12,7 @@ export const selectSoldier = (state, soldierId) => {
     return state[soldierId];
 }
 
+// Returns array of soldier Ids
+export const getSoldierIds = (state) => Object.keys(state.soldiers)
+
 // Add other selectors here

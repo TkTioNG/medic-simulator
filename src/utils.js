@@ -80,4 +80,9 @@ function getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive 
   }
 
+export const generateCoordDelta = (stepSize = settings.SOLDIER_STEP_SIZE) => ({
+    x: getRandomIntInclusive(0, stepSize),
+    y: getRandomIntInclusive(-stepSize, +stepSize),
+});
+
 // You can add more utility functions here
