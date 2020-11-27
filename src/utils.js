@@ -22,7 +22,7 @@ export const initializeBattlefield = () => {
     medics[i] = {
       id: i,
       coordinates: {
-        x: 50,
+        x: 80,
         y: (settings.GIRD_HEIGHT / settings.MEDIC_NUMBER) * i,
       },
       status: medicStateEnum.IDLE,
