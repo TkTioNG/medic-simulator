@@ -1,7 +1,10 @@
 export {
   PREPARE_BATTLEFIELD,
   START_BATTLE,
+  STOP_BATTLE,
+  RESUME_BATTLE,
   CYCLE,
+  MOVE_SOLDIER,
   CALL_MEDIC,
   DISPATCH_MEDIC,
   READY_TO_HEAL,
@@ -13,14 +16,11 @@ export {
 export {
   prepareBattlefield,
   startBattle,
+  stopBattle,
+  resumeBattle,
   cycle,
-  soldierSuccess,
-} from "./soldier";
+} from "./battle";
 
-export {
-  callMedic,
-  dispatchMedic,
-  readyToHeal,
-  healing,
-  soldierHealed,
-} from "./medic";
+export { moveSoldier, callMedic, soldierSuccess } from "./soldier";
+
+export { dispatchMedic, readyToHeal, healing, soldierHealed } from "./medic";

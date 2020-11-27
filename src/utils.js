@@ -190,8 +190,14 @@ export const getClosest = (hunter, preys) => {
 };
 
 export const generateCoordDelta = (stepSize = settings.SOLDIER_STEP_SIZE) => ({
-    x: getRandomIntInclusive(0, stepSize),
-    y: getRandomIntInclusive(-stepSize, +stepSize),
+  x: getRandomIntInclusive(0, stepSize),
+  y: getRandomIntInclusive(-stepSize, +stepSize),
 });
+
+export const isMedicReached = (medic) =>
+  medic.target &&
+  !medic.startHeal &&
+  medic.coordinates.x === medic.target.coordinates.x &&
+  medic.coordinates.y === medic.target.coordinates.y;
 
 // You can add more utility functions here

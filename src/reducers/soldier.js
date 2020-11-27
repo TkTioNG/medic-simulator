@@ -1,31 +1,24 @@
 import * as utils from "../utils";
 import * as actions from "../actions";
 import soldierStatusEnum from "../enums/soldierStateEnum";
-import * as battleActions from "../actions/battle";
 
 const initialState = {
   cycle_count: 0,
   success_count: 0,
   soldiers: {},
-  // medics: {},
 };
 
-export default function battleReducer(state = initialState, action) {
+export default function soldierReducer(state = initialState, action) {
   switch (action.type) {
-    case battleActions.PREPARE_BATTLEFIELD: {
+    case actions.PREPARE_BATTLEFIELD: {
       const initialLocations = utils.initializeBattlefield();
       return Object.freeze({
         ...state,
-        ...initialLocations,
+        cycle_count: 0,
+        success_count: 0,
+        soldiers: initialLocations.soldiers,
       });
     }
-    // case actions.PREPARE_BATTLEFIELD: {
-    //   const initialLocations = utils.initializeBattlefield();
-    //   return Object.freeze({
-    //     ...state,
-    //     soldiers: initialLocations.soldiers,
-    //   });
-    // }
     case actions.CYCLE: {
       const newSoldiersState = utils.getNewSoldiersState(state);
       const new_cycle_count = state.cycle_count + 1;

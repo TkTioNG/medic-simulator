@@ -1,27 +1,22 @@
-import { put, takeEvery, delay, all, select } from "redux-saga/effects";
+import { put, takeEvery, all, select } from "redux-saga/effects";
 
 import * as utils from "../utils";
 import * as actions from "../actions";
-import * as soldierActions from "../actions/soldier";
-import * as battleActions from "../actions/battle";
 import * as selectors from "./selectors";
 
 import * as settings from "../settings";
 
-export function* handleCycle2(action) {
+function* handleCycle() {
   const successSoldiers = yield select(selectors.getSuccessSoldiers);
   // Check if any soldier has succeeded
-  if (successSoldiers.length > 0) {
-    for (let soldierId of successSoldiers) {
-      yield put(actions.soldierSuccess(soldierId));
-    }
-  }
+  yield all(successSoldiers.map((id) => put(actions.soldierSuccess(id))));
 
   const injuredSoldiers = yield select(selectors.getInjuredSoldiers);
   const idleMedics = yield select(selectors.getIdleMedics);
 
   if (injuredSoldiers.length > 0 && idleMedics.length > 0) {
     // Call medic based on first come first serve basis
+    // yield all(injuredSoldiers.map((id) => put(actions.callMedic(id))));
     for (let soldierId of injuredSoldiers) {
       yield put(actions.callMedic(soldierId));
     }
@@ -29,43 +24,23 @@ export function* handleCycle2(action) {
 
   if (idleMedics.length < settings.MEDIC_NUMBER) {
     const assignedMedics = yield select(selectors.getAssignedMedics);
-    for (let medicId of assignedMedics) {
-      const medic = yield select(selectors.selectMedic, medicId);
-      if (
-        medic.target &&
-        !medic.startHeal &&
-        medic.coordinates.x === medic.target.coordinates.x &&
-        medic.coordinates.y === medic.target.coordinates.y
-      ) {
-        yield put(actions.readyToHeal(medic.id));
-        yield put(actions.healing(medic.id, medic.target.id));
-      }
+
+    for (let medic of assignedMedics) {
+      yield put(actions.readyToHeal(medic.id));
+      yield put(actions.healing(medic.id, medic.target.id));
     }
   }
-  // Exit if over cycle limit or all the soldier has crossed the battlefield
-  const numOfSoldiers = yield select(selectors.getSoldierOnField);
-  if (action.cycle_count <= settings.CYCLE_LIMIT && numOfSoldiers) {
-    yield delay(settings.CYCLE_DELAY);
-    yield put(actions.cycle(action.cycle_count + 1));
-  }
-}
 
-function* handleCycle() {
-  const soldierIds = yield select(selectors.getSoldierIds);
+  const healthySoldiers = yield select(selectors.getHealthySoldier);
 
   yield all(
-    soldierIds.map((id) =>
-      put(soldierActions.moveSoldier(id, utils.generateCoordDelta()))
+    healthySoldiers.map((id) =>
+      put(actions.moveSoldier(id, utils.generateCoordDelta()))
     )
   );
 }
 
 function* watchBattle() {
-  yield takeEvery(battleActions.CYCLE, handleCycle);
-}
-
-function* watchBattle2() {
-  yield takeEvery(actions.START_BATTLE, handleCycle);
   yield takeEvery(actions.CYCLE, handleCycle);
 }
 

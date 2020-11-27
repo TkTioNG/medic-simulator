@@ -1,6 +1,9 @@
 export const PREPARE_BATTLEFIELD = "PREPARE_BATTLEFIELD";
 export const START_BATTLE = "START_BATTLE";
+export const STOP_BATTLE = "STOP_BATTLE";
+export const RESUME_BATTLE = "RESUME_BATTLE";
 export const CYCLE = "CYCLE";
+export const MOVE_SOLDIER = "MOVE_SOLDIER";
 export const CALL_MEDIC = "CALL_MEDIC";
 export const DISPATCH_MEDIC = "DISPATCH_MEDIC";
 export const READY_TO_HEAL = "READY_TO_HEAL";

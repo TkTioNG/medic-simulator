@@ -1,6 +1,7 @@
 import soldierStatusEnum from "../enums/soldierStateEnum";
 import medicStatusEnum from "../enums/medicStateEnum";
 import * as settings from "../settings";
+import { isMedicReached } from "../utils";
 
 export const getInjuredSoldiers = (state) => {
   /* Return an array of the IDs of injured soldiers */
@@ -18,6 +19,12 @@ export const getSuccessSoldiers = (state) => {
     .filter((soldier) => soldier.coordinates.x >= settings.GRID_LENGTH)
     .map((soldierObj) => soldierObj.id);
 };
+
+// Returns array of healthy soldier Ids
+export const getHealthySoldier = (state) =>
+  Object.values(state.soldiers.soldiers)
+    .filter((soldier) => soldier.status >= settings.GRID_LENGTH)
+    .map((soldierObj) => soldierObj.id);
 
 // A Selector for soldier given an ID
 export const selectSoldier = (state, soldierId) => {
@@ -37,16 +44,19 @@ export const getIdleMedics = (state) => {
 
 // Return an array of assigned medics
 export const getAssignedMedics = (state) => {
-  return Object.values(state.medics.medics)
-    .filter((medic) => medic.status === medicStatusEnum.ASSIGNED)
-    .map((medicObj) => medicObj.id);
+  return Object.values(state.medics.medics).filter(
+    (medic) =>
+      medic.status === medicStatusEnum.ASSIGNED && isMedicReached(medic)
+  );
 };
-
-// Returns array of soldier Ids
-export const getSoldierIds = (state) => Object.keys(state.soldiers);
 
 // Add other selectors here
 // A Selector for medic given an ID
 export const selectMedic = (state, medicId) => {
   return state.medics.medics[medicId];
 };
+
+// Get current cycle count
+export const getCycleCount = (state) => state.soldiers.cycle_count;
+
+export const getBattleStatus = (state) => state.battle.isCycleStop;

@@ -1,12 +1,5 @@
 import * as actionTypes from "./actionTypes";
 
-export function callMedic(soldierId) {
-  return {
-    type: actionTypes.CALL_MEDIC,
-    soldierId: soldierId,
-  };
-}
-
 export function dispatchMedic(medicId, soldier) {
   return {
     type: actionTypes.DISPATCH_MEDIC,

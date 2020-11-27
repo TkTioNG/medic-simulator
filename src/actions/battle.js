@@ -1,19 +1,24 @@
-export const PREPARE_BATTLEFIELD = 'PREPARE_BATTLEFIELD';
-export const START_BATTLE = 'START_BATTLE';
-export const CYCLE = 'CYCLE';
+import * as actionTypes from "./actionTypes";
 
 export const prepareBattlefield = () => ({
-    type: PREPARE_BATTLEFIELD,
+  type: actionTypes.PREPARE_BATTLEFIELD,
 });
+
 export const startBattle = () => ({
-    type: START_BATTLE,
+  type: actionTypes.START_BATTLE,
+});
+
+export const stopBattle = () => ({
+  type: actionTypes.STOP_BATTLE,
+});
+
+export const resumeBattle = () => ({
+  type: actionTypes.RESUME_BATTLE,
 });
 
 export const cycle = () => ({
-    type: CYCLE,
+  type: actionTypes.CYCLE,
 });
-
-
 
 /* Add other actions here, perhaps you will need something like "dispatchMedic"
 soldierHealed to finish the project */

@@ -79,9 +79,15 @@ div[role="dialog"] .modal{
 
 @keyframes healing-logo-bounce {
   0% {
+    height: 0px;
+  }
+  32% {
+    height: 0px;
+  }
+  33% {
     height: 15px;
   }
-  50% {
+  66% {
     height: 30px;
   }
   100% {
@@ -92,7 +98,8 @@ div[role="dialog"] .modal{
 .finishing-line {
   position: absolute;
   top: 0;
-  width: 5px;
+  width: 15px;
+  margin-right: 50px;
   background: repeating-linear-gradient(
     45deg,
     black,
@@ -100,4 +107,8 @@ div[role="dialog"] .modal{
     yellow 20px,
     yellow 40px
   );
+}
+
+button {
+  margin: 0px 30px !important;
 }

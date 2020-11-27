@@ -1,11 +1,3 @@
-export const MOVE_SOLDIER = "MOVE_SOLDIER";
-
-export const moveSoldier = (id, coordDelta) => ({
-  type: MOVE_SOLDIER,
-  id,
-  coordDelta,
-});
-
 import * as actionTypes from "./actionTypes";
 
 export function prepareBattlefield() {
@@ -13,17 +5,17 @@ export function prepareBattlefield() {
     type: actionTypes.PREPARE_BATTLEFIELD,
   };
 }
-export function startBattle(cycle_count) {
-  return {
-    type: actionTypes.START_BATTLE,
-    cycle_count: cycle_count,
-  };
-}
 
-export function cycle(cycle_count) {
+export const moveSoldier = (id, coordDelta) => ({
+  type: actionTypes.MOVE_SOLDIER,
+  id,
+  coordDelta,
+});
+
+export function callMedic(soldierId) {
   return {
-    type: actionTypes.CYCLE,
-    cycle_count: cycle_count,
+    type: actionTypes.CALL_MEDIC,
+    soldierId: soldierId,
   };
 }
 
